@@ -1,0 +1,19 @@
+
+.task {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 485px;
+    height: 102px;
+    box-shadow: 0 7px 35px 0 rgba(0, 0, 0, .3);
+    font-weight: 600;
+    color: #ffff;
+
+    &__hint {
+        font-size: 1.15em;
+    }
+
+    &__number {
+        font-size: 3.15em;
+    }
+}
