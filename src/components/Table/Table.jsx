@@ -10,11 +10,15 @@ export default function Table() {
     const level = useSelector((state) => state.level);
     const items = useMemo(() => {
         let result = [];
+
+        const min = 10 ** (LEVELS[level].digit - 1);
+        const max = 10 ** LEVELS[level].digit;
+
         for(let i = 0; i < LEVELS[level].count; i++) {
-            result.push(<TableItem num={1} />)
+            result.push(<TableItem num={randomInteger(min, max)} />)
         }
         return result;
-    }, [level])
+    }, [level]);
     
 
     return (
@@ -25,4 +29,10 @@ export default function Table() {
                 {items}
         </div>
     )
+}
+
+
+function randomInteger(min, max) {
+    let rand = min + Math.random() * (max - min);
+    return Math.floor(rand);
 }
