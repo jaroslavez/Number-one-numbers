@@ -1,22 +1,36 @@
 import { useMemo, useState } from 'react';
 import {LEVELS} from '../../levels';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentNumberToFind } from '../../store/currentNumberToFindSlice';
 
 import TableItem from '../TableItem/TableItem';
 
-import "./Table.scss"
+import "./Table.scss";
 
 export default function Table() {
+    const dispatch = useDispatch();
+
     const level = useSelector((state) => state.level);
     const items = useMemo(() => {
         let result = [];
+        let rand_numbers = [];
 
         const min = 10 ** (LEVELS[level].digit - 1);
         const max = 10 ** LEVELS[level].digit;
 
         for(let i = 0; i < LEVELS[level].count; i++) {
-            result.push(<TableItem num={randomInteger(min, max)} />)
+            let num;
+            do{
+                num = randomInteger(min, max);
+            } while(rand_numbers.includes(num));
+
+            rand_numbers.push(num);
+            result.push(<TableItem num={num} key={num}/>);
         }
+
+        const currentNum = rand_numbers[randomInteger(0, rand_numbers.length)];
+        dispatch(setCurrentNumberToFind(currentNum));
+
         return result;
     }, [level]);
     

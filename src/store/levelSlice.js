@@ -4,15 +4,15 @@ export const levelSlice = createSlice({
     name: "level",
     initialState: 1,
     reducers: {
-        increment(state) {
+        incrementLevel(state) {
             return state + 1;
         },
-        reset() {
+        resetLevel() {
             return 1;
         }
     }
 });
 
-export const {increment, reset} = levelSlice.actions;
+export const {incrementLevel, resetLevel} = levelSlice.actions;
 
 export default levelSlice.reducer;

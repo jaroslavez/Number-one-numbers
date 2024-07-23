@@ -1,11 +1,32 @@
 .main-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  
   width: 632px;
   height: 528px;
-  position: relative;
 
-  background-color: green;
+
+  &__countdown-page-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: #1f4a5e;
+  }
+
+  &__game-page-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    background-color: green;
+  }
 }

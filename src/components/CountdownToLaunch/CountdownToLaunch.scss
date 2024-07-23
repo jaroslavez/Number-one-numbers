@@ -1,0 +1,14 @@
+.countdown-to-launch {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+
+    background-color: rgba(255,255,255, 0.3);
+
+    color: #ffff;
+    font-size: 3rem;
+}
