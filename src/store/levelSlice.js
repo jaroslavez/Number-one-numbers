@@ -1,18 +1,30 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
+
+const initialState = {
+    currentLevel: 1,
+    trueLevel: 1,
+}
 
 export const levelSlice = createSlice({
     name: "level",
-    initialState: 1,
+    initialState,
     reducers: {
         incrementLevel(state) {
-            return state + 1;
+            state.trueLevel += 1;
+            state.currentLevel < 9 && state.currentLevel++;
+        },
+        incrementOnlyTrueLevel(state) {
+            state.trueLevel += 1;
         },
         resetLevel() {
-            return 1;
+            return {
+                currentLevel: 1,
+                trueLevel: 1,
+            };
         }
     }
 });
 
-export const {incrementLevel, resetLevel} = levelSlice.actions;
+export const {incrementLevel, incrementOnlyTrueLevel, resetLevel} = levelSlice.actions;
 
 export default levelSlice.reducer;

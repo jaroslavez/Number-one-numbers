@@ -1,6 +1,9 @@
-import { useMemo, useState } from 'react';
-import {LEVELS} from '../../levels';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+
+import {LEVELS} from '../../levels';
+import randomInteger from '../../randomInteger';
+
 import { setCurrentNumberToFind } from '../../store/currentNumberToFindSlice';
 
 import TableItem from '../TableItem/TableItem';
@@ -10,43 +13,40 @@ import "./Table.scss";
 export default function Table() {
     const dispatch = useDispatch();
 
-    const level = useSelector((state) => state.level);
-    const items = useMemo(() => {
+    const currentLevel = useSelector((state) => state.level.currentLevel);
+    const trueLevel = useSelector((state) => state.level.trueLevel);
+    const [items, setItems] = useState(null);
+
+    useEffect(() => {
         let result = [];
         let rand_numbers = [];
 
-        const min = 10 ** (LEVELS[level].digit - 1);
-        const max = 10 ** LEVELS[level].digit;
+        const min = 10 ** (LEVELS[currentLevel].digit - 1);
+        const max = 10 ** LEVELS[currentLevel].digit;
 
-        for(let i = 0; i < LEVELS[level].count; i++) {
+        for(let i = 0; i < LEVELS[currentLevel].count; i++) {
             let num;
             do{
                 num = randomInteger(min, max);
             } while(rand_numbers.includes(num));
 
             rand_numbers.push(num);
-            result.push(<TableItem num={num} key={num}/>);
+            result.push(<TableItem num={num} animated={LEVELS[currentLevel].animate} key={num}/>);
         }
 
         const currentNum = rand_numbers[randomInteger(0, rand_numbers.length)];
         dispatch(setCurrentNumberToFind(currentNum));
 
-        return result;
-    }, [level]);
+        setItems(result);
+    }, [trueLevel]);
     
 
     return (
         <div className="table" style={{
-            gridTemplateColumns: `repeat(${LEVELS[level].columns}, 1fr)`,
-            gridTemplateRows: `repeat(${LEVELS[level].rows}, 1fr)`,
+            gridTemplateColumns: `repeat(${LEVELS[currentLevel].columns}, 1fr)`,
+            gridTemplateRows: `repeat(${LEVELS[currentLevel].rows}, minmax(42px,83px)`,
             }}>
                 {items}
         </div>
     )
-}
-
-
-function randomInteger(min, max) {
-    let rand = min + Math.random() * (max - min);
-    return Math.floor(rand);
 }

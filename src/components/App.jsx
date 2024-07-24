@@ -9,14 +9,22 @@ import Table from './Table/Table';
 import CountdownToLaunch from './CountdownToLaunch/CountdownToLaunch';
 
 import { WINDOWS } from '../store/currentWindowSlice';
+import { COLORS } from '../colors';
+import randomInteger from '../randomInteger';
 
 export default function App() {
   const currentWindow = useSelector(state => state.currentWindow);
+  const trueLevel = useSelector(state => state.level.trueLevel)
   const gamePageWrapperRef = useRef(null)
 
   useEffect(() => {
-    
-  })
+    if(!gamePageWrapperRef || currentWindow !== WINDOWS.game){
+      return;
+    }
+
+    const randIndex = randomInteger(0, COLORS.length);
+    gamePageWrapperRef.current.style.backgroundColor = COLORS[randIndex];
+  }, [gamePageWrapperRef, trueLevel, currentWindow]);
 
   let content;
   if(currentWindow === WINDOWS.countdown){
@@ -42,7 +50,4 @@ export default function App() {
   )
 }
 
-function randomInteger(min, max) {
-  let rand = min + Math.random() * (max - min);
-  return Math.floor(rand);
-}
+

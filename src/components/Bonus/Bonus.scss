@@ -1,0 +1,17 @@
+.header__circle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+.header__circle {
+    display: block;
+    position: relative;
+    top: 1px;
+    border-radius: 50%;
+    border: solid 1px black;
+    width: 5px;
+    height: 5px;
+    &_filled{
+        background-color: black;
+    }
+}

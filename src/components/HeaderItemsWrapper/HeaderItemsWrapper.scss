@@ -1,0 +1,22 @@
+.header-item-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @mixin fonts ($font_size) {
+        font-size: $font_size;
+        //color: #3333;
+    }
+
+    &__name{
+        @include fonts(7px);
+        //font-size: 7px;
+        margin-top: 5px;
+    }
+
+    &__component p{
+        @include fonts(12px);
+        margin: 0;
+        font-weight: 900;
+    }
+}
