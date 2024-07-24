@@ -18,13 +18,23 @@
     }
 }
 
+@keyframes disappearing {
+    from {
+        opacity: 1;
+    }
+    to{
+        opacity: 0;
+    }
+}
+
 .table-item-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: hidden;
     cursor: pointer;
-
-    &:hover {
-        box-shadow: 0 0 15px 0 rgba(0, 0, 0, .3);
-    }
+    overflow: visible;
+    
 
     &__item {
         display: flex;
@@ -36,8 +46,16 @@
         container-type: size;
         background-color: white;
 
+        &:hover {
+            box-shadow: 0 0 15px 0 rgba(0, 0, 0, .3);
+        }
+
         &_jumping {
-            animation: jumping 0.3 infinite alternate linear;
+            animation: jumping 0.4s infinite alternate linear;
+        }
+
+        &_disappearing {
+            animation: disappearing 0.4s infinite alternate linear;
         }
     }
 

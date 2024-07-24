@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import './TableItem.scss';
@@ -30,6 +30,8 @@ export default function TableItem({num, animated}) {
     const isTimeUp = useSelector(state => state.isTimeUp);
     const currentNumToFind = useSelector(state => state.currentNumberToFind);
 
+    const [currentAnimation, setCurrentAnimation] = useState(null);
+
 
     useEffect(() => {
         if(!refItem || !refText)
@@ -39,13 +41,21 @@ export default function TableItem({num, animated}) {
         refItem.current.style.backgroundColor = COLORS[randIndexColor];
 
         
-
-        if(!animated){
+        if(!animated || currentAnimation){
             return;
         }
         const randIndexAnimation = randomInteger(0, ANIMATIONS.length);
+        setCurrentAnimation(ANIMATIONS[randIndexAnimation]);
 
-        switch(ANIMATIONS[randIndexAnimation]){
+        
+    }, [refItem, refText]);
+
+    useEffect(() => {
+        if(!currentAnimation) {
+            return;
+        }
+
+        switch(currentAnimation){
             case "shaking":
                 refText.current.classList.add("table-item-wrapper__text_shaking");
                 break;
@@ -56,7 +66,7 @@ export default function TableItem({num, animated}) {
                 refItem.current.classList.add("table-item-wrapper__item_disappearing");
                 break;
         }
-    }, []);
+    }, [currentAnimation]);
 
     function handleClick() {
         if(currentNumToFind === num) {
