@@ -1,0 +1,24 @@
+@keyframes shaking {
+    from {
+        transform: rotateZ(-0.03turn);
+    }
+    to {
+        transform: rotateZ(0.03turn);
+    }
+}
+
+.notification {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    &__image {
+        height: 30%;
+        aspect-ratio: 1 / 1;
+        animation: shaking 0.1s infinite alternate linear;
+    }
+}

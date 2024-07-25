@@ -1,9 +1,16 @@
 .table {
     display: grid;
+    position: relative;
     justify-content: stretch;
     gap: 20px;
 
     width: 485px;
     max-height: 250px;
     min-height: 200px;
+
+    left: 300px;
+
+    &_transition {
+        transition: left 0.3s ease-in-out;
+    }
 }

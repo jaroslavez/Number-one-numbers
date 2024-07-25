@@ -13,8 +13,9 @@ export const levelSlice = createSlice({
             state.trueLevel += 1;
             state.currentLevel < 9 && state.currentLevel++;
         },
-        incrementOnlyTrueLevel(state) {
+        decrementLevel(state) {
             state.trueLevel += 1;
+            state.currentLevel > 1 && state.currentLevel--;
         },
         resetLevel() {
             return {
@@ -25,6 +26,6 @@ export const levelSlice = createSlice({
     }
 });
 
-export const {incrementLevel, incrementOnlyTrueLevel, resetLevel} = levelSlice.actions;
+export const {incrementLevel, decrementLevel, resetLevel} = levelSlice.actions;
 
 export default levelSlice.reducer;

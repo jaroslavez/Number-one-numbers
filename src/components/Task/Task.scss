@@ -16,6 +16,12 @@
     }
 
     &__number {
+        position: relative;
+        left: 200px;
         font-size: 3.15em;
+
+        &_transition {
+            transition: left 0.3s ease-in-out;
+        }
     }
 }

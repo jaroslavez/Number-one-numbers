@@ -6,6 +6,7 @@ import isTimeUpReducer from './isTimeUpSlice';
 import scoreReducer from './scoreSlice';
 import currentWindowReducer from './currentWindowSlice';
 import bonusReducer from './bonusSlice';
+import accurateAndTotalAnswersReducer from './accurateAndTotalAnswersSlice';
 
 export const store = configureStore({
   reducer: {
@@ -15,5 +16,6 @@ export const store = configureStore({
     score: scoreReducer,
     currentWindow: currentWindowReducer,
     bonus: bonusReducer,
+    accurateAndTotalAnswers: accurateAndTotalAnswersReducer,
   },
 })

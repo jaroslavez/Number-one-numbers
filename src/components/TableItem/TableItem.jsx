@@ -7,9 +7,9 @@ import randomInteger from '../../randomInteger';
 import { COLORS } from '../../colors';
 import { WINDOWS } from '../../store/currentWindowSlice';
 
-import { incrementLevel, incrementOnlyTrueLevel } from '../../store/levelSlice';
-import { incrementBonus } from '../../store/bonusSlice';
-import { resetBonus } from '../../store/bonusSlice';
+import { incrementLevel, decrementLevel } from '../../store/levelSlice';
+import { incrementBonus, decrementBonus } from '../../store/bonusSlice';
+import { incrementAccurateAnswers, incrementonlyTotalAnswers } from '../../store/accurateAndTotalAnswersSlice';
 import { addPoints } from '../../store/scoreSlice';
 import { setCurrentWindow } from '../../store/currentWindowSlice';
 
@@ -69,17 +69,38 @@ export default function TableItem({num, animated}) {
     }, [currentAnimation]);
 
     function handleClick() {
-        if(currentNumToFind === num) {
-            dispatch(addPoints(POINTS * bonus));
-            dispatch(incrementBonus());
-            dispatch(incrementLevel());
-        }
-        else {
-            dispatch(resetBonus());
-            dispatch(incrementOnlyTrueLevel());
-        }
+        const eventFlip = new CustomEvent("flip", { bubbles: true });
+        refItem.current.dispatchEvent(eventFlip);
 
-        isTimeUp && dispatch(setCurrentWindow(WINDOWS.report));
+        setTimeout(() => {
+            if(currentNumToFind === num) {
+                dispatch(addPoints(POINTS * bonus));
+                dispatch(incrementBonus());
+                dispatch(incrementLevel());
+                dispatch(incrementAccurateAnswers());
+    
+                if(!refItem){
+                    return;
+                }
+                const eventRightAnswer = new CustomEvent("RightAnswer", { bubbles: true });
+                refItem.current.dispatchEvent(eventRightAnswer);
+            }
+            else {
+                dispatch(decrementBonus());
+                dispatch(decrementLevel());
+                dispatch(incrementonlyTotalAnswers());
+    
+                if(!refItem){
+                    return;
+                }
+                const eventWrongAnswer = new CustomEvent("WrongAnswer", { bubbles: true });
+                refItem.current.dispatchEvent(eventWrongAnswer);
+            }
+    
+            isTimeUp && dispatch(setCurrentWindow(WINDOWS.report));
+        }, 300);
+    
+        
     }
 
     return (

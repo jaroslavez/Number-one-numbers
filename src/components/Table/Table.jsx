@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 
 import {LEVELS} from '../../levels';
@@ -16,6 +16,25 @@ export default function Table() {
     const currentLevel = useSelector((state) => state.level.currentLevel);
     const trueLevel = useSelector((state) => state.level.trueLevel);
     const [items, setItems] = useState(null);
+
+    const refTable = useRef(null);
+    const [left, setLeft] = useState(200);
+
+    useEffect(() => {
+        window.addEventListener("flip", (e) => {
+            setLeft(-600);
+            setTimeout(() => requestAnimationFrame(() => {
+ 
+                refTable.current.classList.remove("table_transition");
+                setLeft(600);
+                setTimeout(() => requestAnimationFrame(() => {
+                    refTable.current.classList.add("table_transition");
+                    setLeft(0);
+                }), 300);
+            }), 300);
+        })
+        setLeft(0);
+    }, [])
 
     useEffect(() => {
         let result = [];
@@ -42,9 +61,10 @@ export default function Table() {
     
 
     return (
-        <div className="table" style={{
+        <div className="table table_transition" ref={refTable} style={{
             gridTemplateColumns: `repeat(${LEVELS[currentLevel].columns}, 1fr)`,
             gridTemplateRows: `repeat(${LEVELS[currentLevel].rows}, minmax(42px,83px)`,
+            left: `${left}px`,
             }}>
                 {items}
         </div>
