@@ -16,12 +16,30 @@
     }
 
     &__number {
+        text-align: center;
         position: relative;
-        left: 200px;
         font-size: 3.15em;
+        min-width: 113px;
+    }
+}
 
-        &_transition {
-            transition: left 0.3s ease-in-out;
+.flip {
+
+    &-enter{
+        transform: translateX(500px);
+
+        &-active {
+            transform: translateX(0px);
+            transition: transform 0.3s ease-in-out;
         }
     }
+
+    &-exit{
+        transform: translateX(0px);
+        &-active {
+            transform: translateX(-600px);
+            transition: transform 0.3s ease-in-out;
+        }
+    }
+    
 }

@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { LEVELS } from "../../levels";
 
 export default function LevelCounter() {
-    const currentLevel = useSelector(state => state.level.currentLevel);
+    const currentLevel = useSelector(state => state.game.currentLevel);
 
     return(
         <p>

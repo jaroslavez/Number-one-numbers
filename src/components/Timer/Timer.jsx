@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { setIsTimeOut } from "../../store/isTimeUpSlice";
+import { setIsTimeOut } from "../../store/gameSlice";
 
 export default function Timer() {
     const [timeLeft, setTimeLeft] = useState(30);

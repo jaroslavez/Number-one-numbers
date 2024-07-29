@@ -8,9 +8,26 @@
     max-height: 250px;
     min-height: 200px;
 
-    left: 300px;
+    //left: 300px;
+}
 
-    &_transition {
-        transition: left 0.3s ease-in-out;
+.flip {
+
+    &-enter{
+        transform: translateX(300px);
+
+        &-active {
+            transform: translateX(0px);
+            transition: transform 0.3s ease-in-out;
+        }
     }
+
+    &-exit{
+        transform: translateX(0px);
+        &-active {
+            transform: translateX(-600px);
+            transition: transform 0.3s ease-in-out;
+        }
+    }
+    
 }

@@ -2,16 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import './App.scss'
 
-import Header from './Header/Header';
-import Task from './Task/Task';
-import Table from './Table/Table';
 import Notification from './Notification/Notification';
 
-import CountdownToLaunch from './CountdownToLaunch/CountdownToLaunch';
-import Hint from './Hint/Hint';
-import Report from './Report/Report';
-
-import { WINDOWS } from '../store/currentWindowSlice';
+import { WINDOWS } from '../store/gameSlice';
+import { CONTENT } from '../content';
 import { COLORS } from '../colors';
 import randomInteger from '../randomInteger';
 
@@ -20,55 +14,11 @@ import wrong_answer from '../assets/wrong_answer.png';
 
 
 export default function App() {
-  const currentWindow = useSelector(state => state.currentWindow);
-  const trueLevel = useSelector(state => state.level.trueLevel);
-  const gamePageWrapperRef = useRef(null);
+  const currentWindow = useSelector(state => state.game.currentWindow);
+  const mainRef = useRef(null);
   const [answer, setAnswer] = useState(null);
 
-  useEffect(() => {
-    if(!gamePageWrapperRef || currentWindow !== WINDOWS.game){
-      return;
-    }
-
-    const randIndex = randomInteger(0, COLORS.length);
-    gamePageWrapperRef.current.style.backgroundColor = COLORS[randIndex];
-
-    gamePageWrapperRef.current.addEventListener("RightAnswer", () => {
-      setAnswer("right");
-      setTimeout(() => setAnswer(null), 400);
-    });
-    gamePageWrapperRef.current.addEventListener("WrongAnswer", () => {
-      setAnswer("wrong");
-      setTimeout(() => setAnswer(null), 400);
-    });
-  }, [gamePageWrapperRef, trueLevel, currentWindow]);
-
-  let content;
-  if(currentWindow === WINDOWS.hint) {
-    content = (<div className='main-container__hint-page-wrapper'>
-      <Hint />
-    </div>)
-  }
-  else if(currentWindow === WINDOWS.countdown){
-    content = (<div className='main-container__countdown-page-wrapper'>
-      <CountdownToLaunch />
-    </div>)
-  }
-  else if(currentWindow === WINDOWS.game){
-    content = (<div className='main-container__game-page-wrapper' ref={gamePageWrapperRef}>
-      <Header />
-      <Task />
-      <Table />
-    </div>);
-  }
-  else if(currentWindow === WINDOWS.report){
-    content = (<div className='main-container__report-page-wrapper'>
-      <Report />
-    </div>)
-  }
-  else {
-    throw Error("Несуществующее окно");
-  }
+  const content = CONTENT[currentWindow];
 
   let notification;
 
@@ -82,8 +32,29 @@ export default function App() {
     notification = null;
   }
 
+  useEffect(() => {
+    if(!mainRef){
+      return;
+    }
+
+    let timeoutIDs = [];
+
+    mainRef.current.addEventListener("RightAnswer", () => {
+      setAnswer("right");
+      const id = setTimeout(() => setAnswer(null), 400);
+      timeoutIDs.push(id);
+    });
+    mainRef.current.addEventListener("WrongAnswer", () => {
+      setAnswer("wrong");
+      const id = setTimeout(() => setAnswer(null), 400);
+      timeoutIDs.push(id);
+    });
+
+    return () => timeoutIDs.forEach((id) => clearTimeout(id));
+  }, [mainRef]);
+
   return (
-    <main className='main-container'>
+    <main className='main-container' ref={mainRef}>
       {content}
       {notification}
     </main>

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { WINDOWS } from "../../store/currentWindowSlice";
-import { setCurrentWindow } from "../../store/currentWindowSlice";
+import { WINDOWS } from "../../store/gameSlice";
+import { setCurrentWindow } from "../../store/gameSlice";
 
 import "./CountdownToLaunch.scss";
 
@@ -11,12 +11,11 @@ export default function CountdownToLaunch() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if(timeLeft===0){
+        if(!timeLeft){
             dispatch(setCurrentWindow(WINDOWS.game))
-            setTimeLeft(null)
+            setTimeLeft(null);
+            return;
          }
-     
-         if (!timeLeft) return;
      
          const intervalId = setInterval(() => {
            setTimeLeft(timeLeft - 1);

@@ -1,25 +1,26 @@
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setCurrentWindow } from '../../store/currentWindowSlice';
-import { WINDOWS } from '../../store/currentWindowSlice';
-import { resetAnswers } from '../../store/accurateAndTotalAnswersSlice';
-import { resetBonus } from '../../store/bonusSlice';
-import { resetLevel } from '../../store/levelSlice';
-import { resetScore } from '../../store/scoreSlice';
-import { setIsTimeOut } from '../../store/isTimeUpSlice';
+import { reset } from '../../store/gameSlice';
 
 import './Report.scss';
+import { Fragment } from 'react';
 
 const TOP = [
     "first",
     "second",
     "thrird",
-]
+];
+
+const OPTIONS = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+};
 
 export default function Report() {
-    const score = useSelector(state => state.score);
-    const total_answers = useSelector(state => state.accurateAndTotalAnswers.total);
-    const accurate_answers = useSelector(state => state.accurateAndTotalAnswers.accurate);
+    const score = useSelector(state => state.game.score);
+    const total_answers = useSelector(state => state.game.totalAnswers);
+    const accurate_answers = useSelector(state => state.game.accurateAnswers);
 
     const dispatch = useDispatch();
 
@@ -47,28 +48,24 @@ export default function Report() {
 
     }
 
-    let first = localStorage.getItem("first");
-    first && (first = JSON.parse(first));
+    const values_of_LocalStorage = TOP.map((key) => {
+        let value = localStorage.getItem(key);
+        return value ? JSON.parse(value) : null;
+    });
+    
+    const top_results = values_of_LocalStorage.map((value, i) => {
+        return (
+            <Fragment key={i}>
+                <div className='report-page__label'>#{i + 1} {value ? new Date(value.date).toLocaleDateString("ru", OPTIONS) : "---"}</div>
+                <div className='report-page__result'>{value ? value.value : "---"}</div>
+            </Fragment>
+        )
+    });
 
-    let second = localStorage.getItem("second");
-    second && (second = JSON.parse(second));
-
-    let third = localStorage.getItem("thrird");
-    third && (third = JSON.parse(third));
-
-    const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    };
+    
 
     function handleClick() {
-        dispatch(setCurrentWindow(WINDOWS.hint));
-        dispatch(resetAnswers());
-        dispatch(resetBonus());
-        dispatch(resetLevel());
-        dispatch(resetScore());
-        dispatch(setIsTimeOut(false))
+        dispatch(reset());
     }
 
     return(
@@ -84,18 +81,12 @@ export default function Report() {
                 <div className='report-page__result'>{accurate_answers + " из " + total_answers}</div>
 
                 <div className='report-page__label'>Точность ответов</div>
-                <div className='report-page__result'>{(accurate_answers / total_answers) * 100 + "%"}</div>
+                <div className='report-page__result'>{((accurate_answers / total_answers) * 100).toFixed(2) + "%"}</div>
 
                 <p className='report-page__best-result-text'>Три лучших результата</p><span></span>
 
-                <div className='report-page__label'>#1 {first ? new Date(first.date).toLocaleDateString("ru", options) : "---"}</div>
-                <div className='report-page__result'>{first ? first.value : "---"}</div>
+                {top_results}
 
-                <div className='report-page__label'>#2 {second ? new Date(second.date).toLocaleDateString("ru", options) : "---"}</div>
-                <div className='report-page__result'>{second ? second.value : "---"}</div>
-
-                <div className='report-page__label'>#3 {third ? new Date(third.date).toLocaleDateString("ru", options) : "---"}</div>
-                <div className='report-page__result'>{third ? third.value : "---"}</div>
             </div>
             <button className='report-page__again-button' onClick={handleClick}>ЕЩЁ РАЗ?</button>
         </div>

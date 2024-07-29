@@ -1,15 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit'
+// import { createSlice } from '@reduxjs/toolkit'
 
-export const isTimeUpSlice = createSlice({
-    name: "isTimeUp",
-    initialState: false,
-    reducers: {
-        setIsTimeOut(state, action) {
-            return action.payload;
-        },
-    }
-});
+// export const isTimeUpSlice = createSlice({
+//     name: "isTimeUp",
+//     initialState: false,
+//     reducers: {
+//         setIsTimeOut(state, action) {
+//             return action.payload;
+//         },
+//     }
+// });
 
-export const {setIsTimeOut} = isTimeUpSlice.actions;
+// export const {setIsTimeOut} = isTimeUpSlice.actions;
 
-export default isTimeUpSlice.reducer;
+// export default isTimeUpSlice.reducer;

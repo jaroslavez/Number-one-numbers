@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { SwitchTransition, CSSTransition } from "react-transition-group";
 
 import {LEVELS} from '../../levels';
 import randomInteger from '../../randomInteger';
 
-import { setCurrentNumberToFind } from '../../store/currentNumberToFindSlice';
+import { setCurrentNumberToFind } from '../../store/gameSlice';
 
 import TableItem from '../TableItem/TableItem';
 
@@ -13,28 +14,12 @@ import "./Table.scss";
 export default function Table() {
     const dispatch = useDispatch();
 
-    const currentLevel = useSelector((state) => state.level.currentLevel);
-    const trueLevel = useSelector((state) => state.level.trueLevel);
+    const currentNumberToFind = useSelector((state) => state.game.currentNumberToFind);
+    const currentLevel = useSelector((state) => state.game.currentLevel);
+    const trueLevel = useSelector((state) => state.game.trueLevel);
     const [items, setItems] = useState(null);
 
     const refTable = useRef(null);
-    const [left, setLeft] = useState(200);
-
-    useEffect(() => {
-        window.addEventListener("flip", (e) => {
-            setLeft(-600);
-            setTimeout(() => requestAnimationFrame(() => {
- 
-                refTable.current.classList.remove("table_transition");
-                setLeft(600);
-                setTimeout(() => requestAnimationFrame(() => {
-                    refTable.current.classList.add("table_transition");
-                    setLeft(0);
-                }), 300);
-            }), 300);
-        })
-        setLeft(0);
-    }, [])
 
     useEffect(() => {
         let result = [];
@@ -61,12 +46,24 @@ export default function Table() {
     
 
     return (
-        <div className="table table_transition" ref={refTable} style={{
-            gridTemplateColumns: `repeat(${LEVELS[currentLevel].columns}, 1fr)`,
-            gridTemplateRows: `repeat(${LEVELS[currentLevel].rows}, minmax(42px,83px)`,
-            left: `${left}px`,
-            }}>
-                {items}
-        </div>
+        <SwitchTransition mode={"out-in"}>
+            <CSSTransition
+                key={currentNumberToFind}
+                classNames="flip"
+                nodeRef={refTable}
+                addEndListener={(done) => {
+                    refTable.current.addEventListener("transitionend", done, false);
+
+                }} 
+            >
+                <div className="table" ref={refTable} style={{
+                    gridTemplateColumns: `repeat(${LEVELS[currentLevel].columns}, 1fr)`,
+                    gridTemplateRows: `repeat(${LEVELS[currentLevel].rows}, minmax(42px,83px)`,
+                    }}>
+                        {items}
+                </div>
+            </CSSTransition>
+        </SwitchTransition>
+        
     )
 }

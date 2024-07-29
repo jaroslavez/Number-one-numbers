@@ -5,13 +5,18 @@ import './TableItem.scss';
 
 import randomInteger from '../../randomInteger';
 import { COLORS } from '../../colors';
-import { WINDOWS } from '../../store/currentWindowSlice';
+import { 
+    WINDOWS, 
+    setCurrentWindow,
+    incrementLevel,
+    decrementLevel,
+    incrementBonus,
+    decrementBonus,
+    incrementAccurateAnswers,
+    incrementonlyTotalAnswers,
+    addPoints,
+} from '../../store/gameSlice';
 
-import { incrementLevel, decrementLevel } from '../../store/levelSlice';
-import { incrementBonus, decrementBonus } from '../../store/bonusSlice';
-import { incrementAccurateAnswers, incrementonlyTotalAnswers } from '../../store/accurateAndTotalAnswersSlice';
-import { addPoints } from '../../store/scoreSlice';
-import { setCurrentWindow } from '../../store/currentWindowSlice';
 
 const POINTS = 40;
 
@@ -26,9 +31,9 @@ export default function TableItem({num, animated}) {
     const refText = useRef(null);
     const dispatch = useDispatch();
 
-    const bonus = useSelector(state => state.bonus);
-    const isTimeUp = useSelector(state => state.isTimeUp);
-    const currentNumToFind = useSelector(state => state.currentNumberToFind);
+    const bonus = useSelector(state => state.game.bonus);
+    const isTimeUp = useSelector(state => state.game.isTimeUp);
+    const currentNumToFind = useSelector(state => state.game.currentNumberToFind);
 
     const [currentAnimation, setCurrentAnimation] = useState(null);
 
@@ -72,7 +77,6 @@ export default function TableItem({num, animated}) {
         const eventFlip = new CustomEvent("flip", { bubbles: true });
         refItem.current.dispatchEvent(eventFlip);
 
-        setTimeout(() => {
             if(currentNumToFind === num) {
                 dispatch(addPoints(POINTS * bonus));
                 dispatch(incrementBonus());
@@ -98,8 +102,6 @@ export default function TableItem({num, animated}) {
             }
     
             isTimeUp && dispatch(setCurrentWindow(WINDOWS.report));
-        }, 300);
-    
         
     }
 
